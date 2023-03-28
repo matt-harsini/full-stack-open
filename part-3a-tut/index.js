@@ -39,8 +39,6 @@ app.get("/api/notes/:id", (request, response) => {
   } else {
     response.status(404).end();
   }
-  response.json([123]);
-  response.json(note);
 });
 
 app.delete("/api/notes/:id", (request, response) => {
@@ -71,7 +69,6 @@ app.post("/api/notes", (request, response) => {
     important: body.important || false,
     id: generateId(),
   };
-  console.log(notes, note, typeof notes, typeof note);
   notes = notes.concat(note);
 
   response.json(note);
