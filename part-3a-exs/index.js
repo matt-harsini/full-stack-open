@@ -1,14 +1,13 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 app.use(express.json());
-const requestLogger = (request, response, next) => {
-  console.log("Method:", request.method);
-  console.log("Path:  ", request.path);
-  console.log("Body:  ", request.body);
-  console.log("---");
-  next();
-};
-app.use(requestLogger);
+
+morgan.token("body", (request, response) => {
+  return JSON.stringify(request.body);
+});
+
+app.use(morgan(":method :url :status :response-time ms :body"));
 
 let data = [
   {
@@ -64,7 +63,7 @@ function generateId() {
   return maxId;
 }
 
-app.post("/api/persons/", (request, response) => {
+app.post("/api/persons", (request, response) => {
   const body = request.body;
   if (!body.name || !body.number) {
     return response.status(400).json({
